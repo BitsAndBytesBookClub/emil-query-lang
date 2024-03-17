@@ -20,11 +20,10 @@ var tokens = map[string]string{
 }
 
 type parser struct {
-	curr      byte
-	pos       int
-	input     string
-	nextToken string
-	output    string
+	curr   byte
+	pos    int
+	input  string
+	output string
 }
 
 func (p *parser) next() {
