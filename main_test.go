@@ -6,100 +6,81 @@ import (
 
 func TestTokenParse(t *testing.T) {
 	for key, val := range tokens {
-		parser := parser{input: key}
-		parsed := parser.parse()
-		if parsed != val {
-			t.Errorf("Expected %s, got %s", val, parsed)
+		p := newParser(key)
+		if p.parse() != val {
+			t.Errorf("Expected %s, got %s", val, p.parse())
 		}
 	}
 }
 
-func TestBasicSelect(t *testing.T) {
-	parser := parser{input: "yoink * skibity table"}
-	parsed := parser.parse()
-	expected := "select * from table"
-
-	if parsed != expected {
-		t.Errorf("Expected %s, got %s", expected, parsed)
+func TestUseSql(t *testing.T) {
+	input := "yoink * skibity users on god name fr 'john doe'"
+	expected := "select * from users where name = 'john doe'"
+	if UseSql(input) != expected {
+		t.Errorf("Expected %s, got %s", expected, UseSql(input))
 	}
 }
 
-func TestBasicWhere(t *testing.T) {
-	parser := parser{input: "yoink * skibity table on god column = 5"}
-	parsed := parser.parse()
-	expected := "select * from table where column = 5"
-
-	if parsed != expected {
-		t.Errorf("Expected %s, got %s", expected, parsed)
+func TestSimpleSortASC(t *testing.T) {
+	input := "yoink * skibity users on god name fr 'john doe' them ones name short king"
+	expected := "select * from users where name = 'john doe' order by name asc"
+	if UseSql(input) != expected {
+		t.Errorf("Expected %s, got %s", expected, UseSql(input))
 	}
 }
 
-func TestBasicAnd(t *testing.T) {
-	parser := parser{input: "yoink * skibity table on god column = 5 goon column2 = 6"}
-	parsed := parser.parse()
-	expected := "select * from table where column = 5 and column2 = 6"
-
-	if parsed != expected {
-		t.Errorf("Expected %s, got %s", expected, parsed)
+func TestSimpleSortDESC(t *testing.T) {
+	input := "yoink * skibity users on god name fr 'john doe' them ones name tall king"
+	expected := "select * from users where name = 'john doe' order by name desc"
+	if UseSql(input) != expected {
+		t.Errorf("Expected %s, got %s", expected, UseSql(input))
 	}
 }
 
-func TestBasicOr(t *testing.T) {
-	parser := parser{input: "yoink * skibity table on god column = 5 edge column2 = 6"}
-	parsed := parser.parse()
-	expected := "select * from table where column = 5 or column2 = 6"
-
-	if parsed != expected {
-		t.Errorf("Expected %s, got %s", expected, parsed)
+func TestSimpleAnd(t *testing.T) {
+	input := "yoink * skibity users on god name fr 'john doe' goon age fr 25"
+	expected := "select * from users where name = 'john doe' and age = 25"
+	if UseSql(input) != expected {
+		t.Errorf("Expected %s, got %s", expected, UseSql(input))
 	}
 }
 
-func TestBasicNot(t *testing.T) {
-	parser := parser{input: "yoink * skibity table on god bruh column = 5"}
-	parsed := parser.parse()
-	expected := "select * from table where not column = 5"
-
-	if parsed != expected {
-		t.Errorf("Expected %s, got %s", expected, parsed)
+func TestSimpleOr(t *testing.T) {
+	input := "yoink * skibity users on god name fr 'john doe' edge age fr 25"
+	expected := "select * from users where name = 'john doe' or age = 25"
+	if UseSql(input) != expected {
+		t.Errorf("Expected %s, got %s", expected, UseSql(input))
 	}
 }
 
-func TestBasicAsc(t *testing.T) {
-	parser := parser{input: "yoink * skibity table short king"}
-	parsed := parser.parse()
-	expected := "select * from table asc"
-
-	if parsed != expected {
-		t.Errorf("Expected %s, got %s", expected, parsed)
+func TestSimpleNot(t *testing.T) {
+	input := "yoink * skibity users on god bruh name fr 'john doe'"
+	expected := "select * from users where not name = 'john doe'"
+	if UseSql(input) != expected {
+		t.Errorf("Expected %s, got %s", expected, UseSql(input))
 	}
 }
 
-func TestBasicDesc(t *testing.T) {
-	parser := parser{input: "yoink * skibity table tall king"}
-	parsed := parser.parse()
-	expected := "select * from table desc"
-
-	if parsed != expected {
-		t.Errorf("Expected %s, got %s", expected, parsed)
+func TestSimpleUpdate(t *testing.T) {
+	input := "rizzler users w rizz name fr 'john doe'"
+	expected := "update users set name = 'john doe'"
+	if UseSql(input) != expected {
+		t.Errorf("Expected %s, got %s", expected, UseSql(input))
 	}
 }
 
-func TestBasicDelete(t *testing.T) {
-	parser := parser{input: "yeet skibity table on god column = 5"}
-	parsed := parser.parse()
-	expected := "delete from table where column = 5"
-
-	if parsed != expected {
-		t.Errorf("Expected %s, got %s", expected, parsed)
+func TestSimpleDelete(t *testing.T) {
+	input := "yeet skibity users on god name fr 'john doe'"
+	expected := "delete from users where name = 'john doe'"
+	if UseSql(input) != expected {
+		t.Errorf("Expected %s, got %s", expected, UseSql(input))
 	}
 }
 
-func TestBasicInsert(t *testing.T) {
-	parser := parser{input: "slide into table (column1, column2) values (5, 6)"}
-	parsed := parser.parse()
-	expected := "insert into table (column1, column2) values (5, 6)"
-
-	if parsed != expected {
-		t.Errorf("Expected %s, got %s", expected, parsed)
+func TestSimpleInsert(t *testing.T) {
+	input := "slide dms users (name, age) bands ('john doe', 25)"
+	expected := "insert into users (name, age) values ('john doe', 25)"
+	if UseSql(input) != expected {
+		t.Errorf("Expected %s, got %s", expected, UseSql(input))
 	}
 }

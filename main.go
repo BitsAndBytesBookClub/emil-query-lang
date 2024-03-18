@@ -12,11 +12,15 @@ var tokens = map[string]string{
 	"goon":       "and",
 	"edge":       "or",
 	"bruh":       "not",
-	"rizz":       "update",
+	"rizzler":    "update",
+	"w rizz":     "set",
 	"short king": "asc",
 	"tall king":  "desc",
 	"yeet":       "delete",
 	"slide":      "insert",
+	"them ones":  "order by",
+	"bands":      "values",
+	"dms":        "into",
 }
 
 type parser struct {
@@ -24,6 +28,17 @@ type parser struct {
 	pos    int
 	input  string
 	output string
+}
+
+func UseSql(input string) string {
+	p := newParser(input)
+	return p.parse()
+}
+
+func newParser(input string) *parser {
+	return &parser{
+		input: strings.ToLower(input),
+	}
 }
 
 func (p *parser) next() {
@@ -50,7 +65,9 @@ func (p *parser) parse() string {
 			if p.curr == ' ' {
 				if strings.Contains(currToken, "short") ||
 					strings.Contains(currToken, "tall") ||
-					strings.Contains(currToken, "on") {
+					strings.Contains(currToken, "on") ||
+					strings.Contains(currToken, "them") ||
+					strings.Contains(currToken, "w") {
 					continue
 				} else if currToken != "" {
 					p.output += currToken
