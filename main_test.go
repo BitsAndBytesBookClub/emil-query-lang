@@ -84,3 +84,11 @@ func TestSimpleInsert(t *testing.T) {
 		t.Errorf("Expected %s, got %s", expected, UseSql(input))
 	}
 }
+
+func TestLeftJoin(t *testing.T) {
+	input := "yoink * skibity users fanum tax orders ate users.id fr orders.user_id"
+	expected := "select * from users left join orders on users.id = orders.user_id"
+	if UseSql(input) != expected {
+		t.Errorf("Expected %s, got %s", expected, UseSql(input))
+	}
+}

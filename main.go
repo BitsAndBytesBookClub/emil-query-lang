@@ -21,6 +21,8 @@ var tokens = map[string]string{
 	"them ones":  "order by",
 	"bands":      "values",
 	"dms":        "into",
+	"fanum tax":  "left join",
+	"ate":        "on",
 }
 
 type parser struct {
@@ -67,7 +69,8 @@ func (p *parser) parse() string {
 					strings.Contains(currToken, "tall") ||
 					strings.Contains(currToken, "on") ||
 					strings.Contains(currToken, "them") ||
-					strings.Contains(currToken, "w") {
+					strings.Contains(currToken, "w") ||
+					strings.Contains(currToken, "fanum") {
 					continue
 				} else if currToken != "" {
 					p.output += currToken
