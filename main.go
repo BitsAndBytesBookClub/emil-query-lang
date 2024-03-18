@@ -11,7 +11,7 @@ var tokens = map[string]string{
 	"on god":     "where",
 	"goon":       "and",
 	"edge":       "or",
-	"bruh":       "not",
+	"delulu":     "not",
 	"rizzler":    "update",
 	"w rizz":     "set",
 	"short king": "asc",
@@ -23,6 +23,7 @@ var tokens = map[string]string{
 	"dms":        "into",
 	"fanum tax":  "left join",
 	"ate":        "on",
+	"cap":        "as",
 }
 
 type parser struct {

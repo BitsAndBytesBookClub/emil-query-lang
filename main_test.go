@@ -54,7 +54,7 @@ func TestSimpleOr(t *testing.T) {
 }
 
 func TestSimpleNot(t *testing.T) {
-	input := "yoink * skibity users on god bruh name fr 'john doe'"
+	input := "yoink * skibity users on god delulu name fr 'john doe'"
 	expected := "select * from users where not name = 'john doe'"
 	if UseSql(input) != expected {
 		t.Errorf("Expected %s, got %s", expected, UseSql(input))
@@ -88,6 +88,14 @@ func TestSimpleInsert(t *testing.T) {
 func TestLeftJoin(t *testing.T) {
 	input := "yoink * skibity users fanum tax orders ate users.id fr orders.user_id"
 	expected := "select * from users left join orders on users.id = orders.user_id"
+	if UseSql(input) != expected {
+		t.Errorf("Expected %s, got %s", expected, UseSql(input))
+	}
+}
+
+func TestLeftJoinWithAs(t *testing.T) {
+	input := "yoink u.id cap user_id, o.id cap order_id skibity users fanum tax orders ate u.id fr o.user_id"
+	expected := "select u.id as user_id, o.id as order_id from users left join orders on u.id = o.user_id"
 	if UseSql(input) != expected {
 		t.Errorf("Expected %s, got %s", expected, UseSql(input))
 	}
