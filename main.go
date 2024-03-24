@@ -66,12 +66,7 @@ func (p *parser) parse() string {
 			currToken = ""
 		} else {
 			if p.curr == ' ' {
-				if strings.Contains(currToken, "short") ||
-					strings.Contains(currToken, "tall") ||
-					strings.Contains(currToken, "on") ||
-					strings.Contains(currToken, "them") ||
-					strings.Contains(currToken, "w") ||
-					strings.Contains(currToken, "fanum") {
+				if isComboToken(tokens, currToken) {
 					continue
 				} else if currToken != "" {
 					p.output += currToken
@@ -90,4 +85,17 @@ func (p *parser) parse() string {
 	}
 
 	return p.output
+}
+
+func isComboToken(tokens map[string]string, currToken string) bool {
+	for k := range tokens {
+		if strings.Contains(k, " ") {
+			splitAtSpace := strings.Split(k, " ")
+			if strings.Contains(currToken, splitAtSpace[0]) {
+				return true
+			}
+		}
+	}
+
+	return false
 }
